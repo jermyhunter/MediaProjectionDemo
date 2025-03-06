@@ -1,7 +1,9 @@
-In Android 14+, `MediaProjection` must run in `ForegroundService`, or may encountering Security Exception. 
-Permission-requesting and getting `MediaProjectionManager` MUST BE BEFORE starting `ForegroundService`, or may encountering Security Exception.
+In Android 14+, `MediaProjection` must run in **ForegroundService**, or may encountering Security Exception. 
+
+Permission-requesting and getting `MediaProjectionManager` **MUST BE BEFORE** starting `ForegroundService`, or may encountering Security Exception.
 
 **PREREQUISITE**
+
 Setting up `FOREGROUND_SERVICE`、`FOREGROUND_SERVICE_MEDIA_PROJECTION` and `Service` label in `AndroidManifest.xml`
 
 ```xml
@@ -18,7 +20,7 @@ Setting up `FOREGROUND_SERVICE`、`FOREGROUND_SERVICE_MEDIA_PROJECTION` and `Ser
 </application>
 ```
 
-The whole process:  
+The whole process as follow:
 1. request permission of media projection
 2. create `NotificationChannel`
 3. get `MediaProjectionManager`
@@ -35,3 +37,4 @@ References:
 [Media Projection | Android Dev](https://developer.android.com/reference/android/media/projection/MediaProjection)
 [MediaProjectionManager#createScreenCaptureIntent](https://developer.android.com/reference/android/media/projection/MediaProjectionManager#createScreenCaptureIntent\(android.media.projection.MediaProjectionConfig\))
 [Service-type](https://developer.android.com/develop/background-work/services/fgs/service-types?)
+[Stack overflow](https://stackoverflow.com/questions/77307867/screen-capture-mediaprojection-on-android-14)
