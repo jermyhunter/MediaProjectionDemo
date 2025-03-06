@@ -1,13 +1,7 @@
 package gurray.demo.mediaprojection
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.media.projection.MediaProjectionManager
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,8 +20,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import gurray.demo.mediaprojection.service.ScreenShotService
 import gurray.demo.mediaprojection.ui.theme.MediaProjectionDemoTheme
 

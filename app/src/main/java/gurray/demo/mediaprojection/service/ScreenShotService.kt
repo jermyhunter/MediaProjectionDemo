@@ -22,10 +22,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.ViewModelProvider
 import gurray.demo.mediaprojection.R
 import gurray.demo.mediaprojection.ScreenshotApplication
 import gurray.demo.mediaprojection.ScreenshotViewModel
