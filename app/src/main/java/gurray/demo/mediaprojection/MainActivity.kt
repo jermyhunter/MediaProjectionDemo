@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
                             }
                         ) { Text("ScreenShot\n开始截屏") }
 
+                        // TODO: process the bitmap of screenshot as your will
                         // showing bitmap data transmitted from service
                         screenshot?.let {
                             Image(
