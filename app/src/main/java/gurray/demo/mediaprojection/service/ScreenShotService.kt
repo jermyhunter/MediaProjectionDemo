@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Bitmap.*
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
@@ -24,7 +25,11 @@ import android.util.Log
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.ViewModelProvider
 import gurray.demo.mediaprojection.R
+import gurray.demo.mediaprojection.ScreenshotApplication
+import gurray.demo.mediaprojection.ScreenshotViewModel
+import java.io.ByteArrayOutputStream
 
 
 /**
@@ -52,6 +57,8 @@ import gurray.demo.mediaprojection.R
  *  (permission requesting is already done in MainActivity in this project)
  * */
 class ScreenShotService: Service(){
+    private lateinit var screenshotViewModel: ScreenshotViewModel
+
     private var mediaProjection: MediaProjection? = null
     private var virtualDisplay: VirtualDisplay? = null
     private var imageReader: ImageReader? = null
@@ -74,6 +81,9 @@ class ScreenShotService: Service(){
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // get ViewModel
+        screenshotViewModel = (application as ScreenshotApplication).screenshotViewModel
+
         when (intent?.action) {
             Actions.START.name -> startScreenCapture(intent)
         }
@@ -110,8 +120,10 @@ class ScreenShotService: Service(){
             Handler(Looper.getMainLooper()).postDelayed({
                 val image = reader.acquireLatestImage()
                 image?.let {
-                    val imageBitmap = imageToImageBitmap(it)
+                    val bitmap = imageToBitmap(it)
                     // TODO: image processing here, do as your will
+                    screenshotViewModel.setScreenshot(bitmap)
+
                     image.close()
                     // equals STOP
                     // releasing sources to stop recording to achieve screenshot use
@@ -132,7 +144,7 @@ class ScreenShotService: Service(){
         Log.d("MediaProjection", "VirtualDisplay created: $screenWidth x $screenHeight")
     }
 
-    private fun imageToImageBitmap(image: Image): ImageBitmap {
+    private fun imageToBitmap(image: Image): Bitmap {
         val planes = image.planes
         val buffer = planes[0].buffer
         val pixelStride = planes[0].pixelStride
@@ -147,8 +159,20 @@ class ScreenShotService: Service(){
         bitmap.copyPixelsFromBuffer(buffer)
 
         // transform Bitmap to ImageBitmap
-        return bitmap.asImageBitmap()
+        return bitmap
     }
+
+    private fun sendBitmapToMainActivity(bitmap: Bitmap) {
+        val intent = Intent("SEND_SCREENSHOT")
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        intent.putExtra("screenshot", byteArray)
+
+        // 发送广播
+        sendBroadcast(intent)
+    }
+
 
     //----------------------------------------------------------------
     private fun releasingSources() {
