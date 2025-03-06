@@ -159,18 +159,6 @@ class ScreenShotService: Service(){
         return bitmap
     }
 
-    private fun sendBitmapToMainActivity(bitmap: Bitmap) {
-        val intent = Intent("SEND_SCREENSHOT")
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-        intent.putExtra("screenshot", byteArray)
-
-        // 发送广播
-        sendBroadcast(intent)
-    }
-
-
     //----------------------------------------------------------------
     private fun releasingSources() {
         Log.d("MediaProjection", "Stopping MediaProjection")
