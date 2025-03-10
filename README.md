@@ -1,4 +1,8 @@
-In Android 14+, `MediaProjection` must run in **ForegroundService**, or may encountering Security Exception. 
+https://github.com/user-attachments/assets/134a0aae-4551-43ff-94bd-8e9b322e8ba0
+
+In Android 14
+
++, `MediaProjection` must run in **ForegroundService**, or may encountering Security Exception. 
 
 Permission-requesting and getting `MediaProjectionManager` **MUST BE BEFORE** starting `ForegroundService`, or may encountering Security Exception.
 
