@@ -2,7 +2,9 @@ In Android 14+, `MediaProjection` must run in **ForegroundService**, or may enco
 
 Permission-requesting and getting `MediaProjectionManager` **MUST BE BEFORE** starting `ForegroundService`, or may encountering Security Exception.
 
-# PREREQUISITE
+# 1. Guidelines
+
+## PREREQUISITE
 
 Setting up `FOREGROUND_SERVICE`、`FOREGROUND_SERVICE_MEDIA_PROJECTION` and `Service` label in `AndroidManifest.xml`
 
@@ -31,16 +33,40 @@ Setting up `FOREGROUND_SERVICE`、`FOREGROUND_SERVICE_MEDIA_PROJECTION` and `Ser
 
 After the first time running, loop 1, 3-7 steps
 
----
-
-# How to use
+## How to use
 
 Process the bitmap data further from service at the **TODO** comment from MainActivity.kt.
 
-**In order to get the right screenshot, 1000ms delay is set before capturin in the demo.**
+**In order to get the right screenshot after alert dialog disappeared, 1000ms delay is set before capturin in the demo.**
 
 ---
-# References
+
+# 2. Problems
+
+## \*Defect: repetitve permission request
+
+Everytime caturing the screen, you must request a permission from the user, which means you can't cature other app's display correctly.
+So I set 1000ms delay to let user to switching to the right app. In your development, you can use **countdown showing on [Floating Window](https://github.com/only52607/compose-floating-window/tree/0bd5025c480dbc3827b729596590f8a4a9689fea)** to notify the user.
+
+## \*WARNING: Android 34+
+
+[User consent | Android Devs](https://developer.android.com/media/grow/media-projection#user_consent)
+> Your app must request user consent before each media projection session. A session is a single call to createVirtualDisplay(). A MediaProjection token must be used only once to make the call.
+> 
+> On Android 14 or higher, the createVirtualDisplay() method throws a SecurityException if your app does either of the following:
+> 
+> Passes an Intent instance returned from createScreenCaptureIntent() to getMediaProjection() more than once
+> Calls createVirtualDisplay() more than once on the same MediaProjection instance
+
+---
+
+# 3. References
+
+## Relevant library
+
+[compose-floating-window | Github](https://github.com/only52607/compose-floating-window/blob/0bd5025c480dbc3827b729596590f8a4a9689fea)
+
+## Pages
 [Media Projection | Android Dev](https://developer.android.com/reference/android/media/projection/MediaProjection)
 
 [MediaProjectionManager#createScreenCaptureIntent](https://developer.android.com/reference/android/media/projection/MediaProjectionManager#createScreenCaptureIntent\(android.media.projection.MediaProjectionConfig\))
